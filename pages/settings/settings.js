@@ -1,7 +1,8 @@
-// pages/settings/settings.js
 const shareConfig = require('../../utils/shareConfig.js');
+const dataManager = require('../../utils/dataManager.js');
 
 const COLORS = ['#07c160', '#1989fa', '#fa5151', '#ff9300', '#7232dd', '#07c160', '#1989fa'];
+const API_KEY = 'apiBaseUrl';
 
 Page({
   data: {
@@ -9,11 +10,19 @@ Page({
     inactiveMembers: [],
     showAddModal: false,
     newMemberName: '',
-    avatarColors: COLORS
+    avatarColors: COLORS,
+    apiUrl: ''
   },
 
-  onLoad() { this.loadMembers(); },
-  onShow() { this.loadMembers(); },
+  onLoad() {
+    this.loadMembers();
+    this.setData({ apiUrl: wx.getStorageSync('apiBaseUrl') || '' });
+  },
+  onShow() {
+    this.loadMembers();
+    const url = wx.getStorageSync('apiBaseUrl') || '';
+    if (url !== this.data.apiUrl) this.setData({ apiUrl: url });
+  },
 
   loadMembers() {
     const all = shareConfig.getMembers();
@@ -59,6 +68,28 @@ Page({
 
     this.hideAddDialog();
     this.loadMembers();
+  },
+
+  onApiInput(e) {
+    const url = e.detail.value.trim();
+    wx.setStorageSync('apiBaseUrl', url);
+    dataManager.setApiBase(url);
+  },
+
+  syncNow() {
+    wx.showLoading({ title: '同步中...' });
+    dataManager.syncPull().then(pulled => {
+      if (pulled) {
+        wx.hideLoading();
+        wx.showToast({ title: '已从云端拉取', icon: 'success' });
+      } else {
+        return dataManager.syncPush().then(pushed => {
+          wx.hideLoading();
+          if (pushed) wx.showToast({ title: '已推送到云端', icon: 'success' });
+          else wx.showToast({ title: '同步失败，检查地址', icon: 'none' });
+        });
+      }
+    });
   },
 
   resetToDefault() {

@@ -117,6 +117,39 @@
 }
 .footer-btn:active { background: #e8e8e8; }
 
+/* 同步 */
+.sync-card { padding: 20rpx; margin-bottom: 20rpx; }
+.sync-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 8rpx;
+}
+.sync-label {
+  font-size: 26rpx;
+  color: #1a1a1a;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.sync-input {
+  flex: 1;
+  height: 60rpx;
+  padding: 0 16rpx;
+  border: 2rpx solid #eee;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+}
+.sync-hint {
+  display: block;
+  font-size: 20rpx;
+  color: #c0c0c0;
+  margin-bottom: 16rpx;
+}
+.sync-actions {
+  display: flex;
+  gap: 12rpx;
+}
+
 .modal-input {
   width: 100%;
   padding: 22rpx 24rpx;

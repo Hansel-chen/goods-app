@@ -47,6 +47,21 @@
     </view>
   </view>
 
+  <!-- 数据同步 -->
+  <view class="section-label" style="margin-top: 40rpx;">
+    <text>数据同步</text>
+  </view>
+  <view class="card sync-card">
+    <view class="sync-row">
+      <text class="sync-label">服务器地址</text>
+      <input class="sync-input" placeholder="留空=仅本地" value="{{apiUrl}}" bindinput="onApiInput" />
+    </view>
+    <text class="sync-hint">部署后端后填入 URL，例如 https://xxx.up.railway.app</text>
+    <view class="sync-actions">
+      <button class="footer-btn" bindtap="syncNow">🔄 手动同步</button>
+    </view>
+  </view>
+
   <!-- 底部操作 -->
   <view class="footer-actions">
     <button class="footer-btn" bindtap="resetToDefault">↺ 重置为默认</button>

@@ -2,21 +2,23 @@ const dataManager = require('./utils/dataManager.js');
 
 App({
   onLaunch() {
-    const env = '你的云环境ID'; // 替换为你的云环境ID
-    dataManager.initCloud(env).then(() => {
-      console.log('云数据库同步完成');
-    }).catch(() => {
-      console.log('云数据库不可用，使用本地存储');
-    });
-
+    // 从本地读取已保存的 API 地址
+    const savedUrl = wx.getStorageSync('apiBaseUrl') || '';
+    dataManager.setApiBase(savedUrl);
     const data = wx.getStorageSync('goodsData');
+
+    // 从云端拉取数据
+    if (data && data.length > 0) {
+      dataManager.syncPull().then(ok => {
+        if (ok) console.log('后端同步完成');
+      });
+    }
+
+    // v1→v3：比率小数→百分比 + 重算所有分成
     const MIGRATION_KEY = 'dataVersion';
     const version = wx.getStorageSync(MIGRATION_KEY) || 1;
-
-    // v1→v3：比率小数→百分比 + 重算所有分成（消除浮点残留）
     if (version < 3) {
       if (data && data.length > 0) {
-        const dataManager = require('./utils/dataManager.js');
         data.forEach(item => {
           Object.keys(item).forEach(k => {
             if (k.endsWith('Ratio')) {
@@ -30,12 +32,12 @@ App({
           Object.assign(item, recalc);
         });
         wx.setStorageSync('goodsData', data);
-        console.log('数据迁移完成 v' + version + '→v3：重算分成');
+        console.log('数据迁移完成 v' + version + '→v3');
       }
       wx.setStorageSync(MIGRATION_KEY, 3);
     }
 
-    // v4→v5：恢复被误转为在售中的未售出记录
+    // v4→v5：恢复未售出
     if (version < 5) {
       const cur = wx.getStorageSync('goodsData');
       if (cur && cur.length > 0) {
@@ -47,7 +49,7 @@ App({
           }
         });
         wx.setStorageSync('goodsData', cur);
-        console.log('数据迁移完成 v4→v5：恢复未售出状态');
+        console.log('数据迁移完成 v4→v5');
       }
       wx.setStorageSync(MIGRATION_KEY, 5);
     }
@@ -67,7 +69,7 @@ App({
         });
         if (changed) {
           wx.setStorageSync('goodsData', cur);
-          console.log('数据迁移完成 v5→v6：咸鱼→闲鱼');
+          console.log('数据迁移完成 v5→v6');
         }
       }
       wx.setStorageSync(MIGRATION_KEY, 6);
@@ -85,11 +87,10 @@ App({
       }
       
       console.log('初始数据已导入：' + initData.initialData.length + '条');
-      dataManager.initCloud(env); // 重试同步，把初始数据传到云端
     }
   },
 
   globalData: {
     userInfo: null
   }
-})
+});

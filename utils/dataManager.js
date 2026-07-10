@@ -1,8 +1,11 @@
 const STORAGE_KEY = 'goodsData';
 const shareConfig = require('./shareConfig.js');
-const cloudDb = require('./cloudDb.js');
 
-let cloudReady = false;
+let API_BASE = '';
+
+function setApiBase(url) {
+  API_BASE = url.replace(/\/+$/, '');
+}
 
 function round2(num) {
   return Math.round(num * 100 + (num >= 0 ? 0.0001 : -0.0001)) / 100;
@@ -98,7 +101,7 @@ function add(item) {
   };
   list.unshift(newItem);
   saveAll(list);
-  if (cloudReady) cloudDb.add(newItem).catch(() => {});
+  syncAdd(newItem);
   return newItem;
 }
 
@@ -119,7 +122,7 @@ function update(id, item) {
       updateTime: new Date().toISOString()
     };
     saveAll(list);
-    if (cloudReady) cloudDb.update(id, list[index]).catch(() => {});
+    syncUpdate(id, list[index]);
     return list[index];
   }
   return null;
@@ -129,38 +132,13 @@ function deleteItem(id) {
   const list = getAll();
   const newList = list.filter(item => item.id !== id);
   saveAll(newList);
-  if (cloudReady) cloudDb.remove(id).catch(() => {});
+  syncDelete(id);
   return true;
-}
-
-async function syncFromCloud() {
-  try {
-    const cloudData = await cloudDb.getAll();
-    if (cloudData.length === 0) {
-      const local = getAll();
-      if (local.length > 0) {
-        for (const item of local) {
-          await cloudDb.add(item).catch(() => {});
-        }
-      }
-    } else {
-      saveAll(cloudData);
-    }
-    cloudReady = true;
-  } catch (e) {
-    cloudReady = false;
-  }
-}
-
-function initCloud(env) {
-  cloudDb.init(env);
-  return syncFromCloud();
 }
 
 function clear() {
   try {
     wx.removeStorageSync(STORAGE_KEY);
-    cloudReady = false;
     return true;
   } catch (e) {
     return false;
@@ -214,14 +192,75 @@ function assignOrderNos() {
     changed = true;
   });
 
-  if (changed) {
-    saveAll(list);
-    if (cloudReady) {
-      list.forEach(item => {
-        cloudDb.update(item.id, { orderNo: item.orderNo }).catch(() => {});
-      });
-    }
-  }
+  if (changed) saveAll(list);
+}
+
+// --- API sync ---
+
+function apiUrl(path) {
+  return API_BASE + path;
+}
+
+function syncAdd(item) {
+  if (!API_BASE) return;
+  wx.request({
+    url: apiUrl('/api/goods'),
+    method: 'POST',
+    data: item,
+    fail() {}
+  });
+}
+
+function syncUpdate(id, item) {
+  if (!API_BASE) return;
+  wx.request({
+    url: apiUrl('/api/goods/' + id),
+    method: 'PUT',
+    data: item,
+    fail() {}
+  });
+}
+
+function syncDelete(id) {
+  if (!API_BASE) return;
+  wx.request({
+    url: apiUrl('/api/goods/' + id),
+    method: 'DELETE',
+    fail() {}
+  });
+}
+
+function syncPull() {
+  return new Promise((resolve) => {
+    if (!API_BASE) return resolve(false);
+    wx.request({
+      url: apiUrl('/api/goods'),
+      success(res) {
+        if (res.statusCode === 200 && Array.isArray(res.data) && res.data.length > 0) {
+          saveAll(res.data);
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      },
+      fail() { resolve(false); }
+    });
+  });
+}
+
+function syncPush() {
+  return new Promise((resolve) => {
+    if (!API_BASE) return resolve(false);
+    const local = getAll();
+    if (local.length === 0) return resolve(false);
+    wx.request({
+      url: apiUrl('/api/goods'),
+      method: 'PUT',
+      data: local,
+      success() { resolve(true); },
+      fail() { resolve(false); }
+    });
+  });
 }
 
 module.exports = {
@@ -236,7 +275,7 @@ module.exports = {
   importData,
   calculateProfitAndShare,
   assignOrderNos,
-  initCloud,
-  syncFromCloud,
-  cloudReady
+  setApiBase,
+  syncPull,
+  syncPush
 };
