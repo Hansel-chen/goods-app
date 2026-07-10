@@ -47,9 +47,13 @@ Page({
 
   onLoad() {
     this.setData({ filterIndex: this.data.filterOptions.findIndex(o => o.value === this.data.statusFilter) });
-    this.loadData();
+    this.syncAndLoad();
   },
-  onShow() { this.loadData(); },
+  onShow() { this.syncAndLoad(); },
+
+  syncAndLoad() {
+    dataManager.syncPull().then(() => this.loadData());
+  },
 
   loadData() {
     dataManager.assignOrderNos();

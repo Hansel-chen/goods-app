@@ -18,11 +18,15 @@ Page({
   },
 
   onLoad() {
-    this.loadData();
+    this.syncAndLoad();
   },
 
   onShow() {
-    this.loadData();
+    this.syncAndLoad();
+  },
+
+  syncAndLoad() {
+    dataManager.syncPull().then(() => this.loadData());
   },
 
   loadData() {

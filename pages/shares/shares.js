@@ -15,8 +15,12 @@ Page({
     dateEnd: ''
   },
 
-  onLoad() { this.loadData(); },
-  onShow() { this.loadData(); },
+  onLoad() { this.syncAndLoad(); },
+  onShow() { this.syncAndLoad(); },
+
+  syncAndLoad() {
+    dataManager.syncPull().then(() => this.loadData());
+  },
 
   loadData() {
     dataManager.assignOrderNos();

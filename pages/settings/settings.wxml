@@ -57,9 +57,7 @@
       <input class="sync-input" placeholder="留空=仅本地" value="{{apiUrl}}" bindinput="onApiInput" />
     </view>
     <text class="sync-hint">部署后端后填入 URL，例如 https://xxx.up.railway.app</text>
-    <view class="sync-actions">
-      <button class="footer-btn" bindtap="syncNow">🔄 手动同步</button>
-    </view>
+    <view class="sync-hint">填好地址后自动同步，无需手动操作</view>
   </view>
 
   <!-- 底部操作 -->
