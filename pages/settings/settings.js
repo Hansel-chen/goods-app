@@ -77,14 +77,20 @@ Page({
   },
 
   syncNow() {
+    const url = this.data.apiUrl;
+    if (!url) return wx.showToast({ title: '请先填写服务器地址', icon: 'none' });
     wx.showLoading({ title: '同步中...' });
-    dataManager.syncPull().then(pulled => {
-      if (pulled) {
-        wx.hideLoading();
+    Promise.race([
+      dataManager.syncPull(),
+      new Promise(r => setTimeout(() => r('timeout'), 15000))
+    ]).then(result => {
+      wx.hideLoading();
+      if (result === 'timeout') {
+        wx.showToast({ title: '连接超时，检查地址或网络', icon: 'none' });
+      } else if (result) {
         wx.showToast({ title: '已从云端拉取', icon: 'success' });
       } else {
-        return dataManager.syncPush().then(pushed => {
-          wx.hideLoading();
+        dataManager.syncPush().then(pushed => {
           if (pushed) wx.showToast({ title: '已推送到云端', icon: 'success' });
           else wx.showToast({ title: '同步失败，检查地址', icon: 'none' });
         });

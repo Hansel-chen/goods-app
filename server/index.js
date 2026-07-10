@@ -25,6 +25,9 @@ function writeData(data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
 
+// 健康检查
+app.get('/', (req, res) => res.json({ ok: true, count: readData().length }));
+
 // 获取全部商品
 app.get('/api/goods', (req, res) => {
   res.json(readData());
