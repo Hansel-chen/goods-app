@@ -325,7 +325,7 @@ Page({
       },
       fail: err => {
         wx.hideLoading();
-        wx.showModal({ title: '查询失败', content: '请检查：\n1. 设置页的服务器地址是否正确\n2. 后端是否已部署最新代码\n3. 网络是否正常', showCancel: false });
+        wx.showModal({ title: '查询失败', content: err.errMsg || '请检查服务器地址或网络', showCancel: false });
       }
     });
   },
