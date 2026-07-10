@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "pages/list/list",
+    "pages/shares/shares",
+    "pages/unsold/unsold",
+    "pages/settings/settings",
+    "pages/add/add",
+    "pages/edit/edit",
+    "pages/detail/detail"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#07c160",
+    "navigationBarTitleText": "倒货管理系统",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#07c160",
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/list/list",
+        "text": "首页",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home-active.png"
+      },
+      {
+        "pagePath": "pages/shares/shares",
+        "text": "分成",
+        "iconPath": "images/shares.png",
+        "selectedIconPath": "images/shares-active.png"
+      },
+      {
+        "pagePath": "pages/unsold/unsold",
+        "text": "在售",
+        "iconPath": "images/unsold.png",
+        "selectedIconPath": "images/unsold-active.png"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "设置",
+        "iconPath": "images/settings.png",
+        "selectedIconPath": "images/settings-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,139 @@
+.page {
+  padding: 20rpx 20rpx 40rpx;
+}
+
+/* 时间筛选 */
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+.date-pick {
+  flex: 1;
+  padding: 14rpx 16rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  color: #c0c0c0;
+  text-align: center;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.date-pick.active { color: #1a1a1a; }
+.date-sep { font-size: 24rpx; color: #c0c0c0; }
+.date-clear {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: #8c8c8c;
+}
+
+.share-summary {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+.summary-card {
+  flex: 1;
+  border-radius: 16rpx;
+  padding: 24rpx 16rpx;
+  color: #fff;
+  box-shadow: 0 6rpx 20rpx rgba(0,0,0,0.12);
+}
+.summary-card:active { transform: scale(0.96); }
+.summary-name {
+  display: block;
+  font-size: 24rpx;
+  opacity: 0.9;
+  margin-bottom: 8rpx;
+}
+.summary-amount {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 800;
+}
+.summary-count {
+  display: block;
+  font-size: 20rpx;
+  opacity: 0.7;
+  margin-top: 6rpx;
+}
+
+.member-selector {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+  margin-bottom: 20rpx;
+}
+.member-option {
+  padding: 12rpx 28rpx;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+  background: #f0f0f0;
+  color: #666;
+}
+.member-option.active {
+  background: #07c160;
+  color: #fff;
+  box-shadow: 0 4rpx 12rpx rgba(7,193,96,0.3);
+}
+
+.detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+.detail-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.detail-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+  padding-bottom: 12rpx;
+  border-bottom: 2rpx solid #eee;
+}
+.detail-order {
+  font-size: 22rpx;
+  color: #c0c0c0;
+  margin-right: 8rpx;
+}
+.detail-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  flex: 1;
+  margin-right: 12rpx;
+}
+.detail-body {
+  display: flex;
+  gap: 0;
+}
+.detail-meta {
+  flex: 1;
+  text-align: center;
+}
+.meta-key {
+  display: block;
+  font-size: 22rpx;
+  color: #8c8c8c;
+  margin-bottom: 4rpx;
+}
+.meta-val {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.detail-meta.highlight .meta-val { color: #1989fa; }
+.share-val { font-weight: 700; }

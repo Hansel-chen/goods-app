@@ -1,0 +1,66 @@
+<!-- pages/settings/settings.wxml -->
+<view class="page">
+
+  <!-- 标题 -->
+  <view class="header-bar">
+    <text class="header-title">分成人员管理</text>
+    <text class="header-desc">启用的成员会出现在添加/编辑页面的分成比例中</text>
+  </view>
+
+  <!-- 活跃成员 -->
+  <view class="section-label">
+    <text>活跃成员</text>
+    <text class="section-count">{{members.length}}人</text>
+  </view>
+
+  <view class="member-card" wx:for="{{members}}" wx:key="id">
+    <view class="member-left">
+      <view class="member-avatar" style="background: {{avatarColors[index % avatarColors.length]}}">
+        {{item.name.substring(0, 1).toUpperCase()}}
+      </view>
+      <text class="member-name">{{item.name}}</text>
+    </view>
+    <switch checked="{{item.active}}" bindchange="toggleMember" data-id="{{item.id}}" color="#07c160" />
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="add-bar" bindtap="showAddDialog">
+    <text class="add-icon">＋</text>
+    <text class="add-text">添加新成员</text>
+  </view>
+
+  <!-- 已停用成员 -->
+  <view wx:if="{{inactiveMembers.length > 0}}">
+    <view class="section-label muted">
+      <text>已停用</text>
+      <text class="section-count">{{inactiveMembers.length}}人</text>
+    </view>
+
+    <view class="member-card inactive" wx:for="{{inactiveMembers}}" wx:key="id">
+      <view class="member-left">
+        <view class="member-avatar disabled">
+          {{item.name.substring(0, 1).toUpperCase()}}
+        </view>
+        <text class="member-name disabled">{{item.name}}</text>
+      </view>
+      <switch checked="{{item.active}}" bindchange="toggleMember" data-id="{{item.id}}" color="#07c160" />
+    </view>
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="footer-actions">
+    <button class="footer-btn" bindtap="resetToDefault">↺ 重置为默认</button>
+  </view>
+</view>
+
+<!-- 添加弹窗 -->
+<view class="modal-overlay {{showAddModal ? 'show' : ''}}" bindtap="hideAddDialog">
+  <view class="modal-box" catchtap="preventBubble">
+    <view class="modal-title">添加成员</view>
+    <input class="modal-input" placeholder="输入成员名称" value="{{newMemberName}}" bindinput="onNewMemberInput" />
+    <view class="modal-actions">
+      <button class="btn btn-ghost flex-1" bindtap="hideAddDialog">取消</button>
+      <button class="btn btn-primary flex-1" bindtap="confirmAdd">确定</button>
+    </view>
+  </view>
+</view>

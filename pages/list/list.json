@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "倒货管理",
+  "navigationBarBackgroundColor": "#07c160",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#f5f6fa"
+}

@@ -1,0 +1,126 @@
+.page {
+  padding: 0 20rpx 140rpx;
+}
+
+/* 时间筛选 */
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+.date-pick {
+  flex: 1;
+  padding: 14rpx 16rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  color: #c0c0c0;
+  text-align: center;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.date-pick.active { color: #1a1a1a; }
+.date-sep { font-size: 24rpx; color: #c0c0c0; }
+.date-clear {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: #8c8c8c;
+}
+
+/* 搜索 */
+.search-wrap { padding: 20rpx 0; }
+.search-box {
+  display: flex; align-items: center;
+  background: #fff; border-radius: 50rpx;
+  padding: 0 24rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.search-icon { font-size: 28rpx; margin-right: 12rpx; }
+.search-input { flex: 1; height: 68rpx; padding: 0 12rpx; font-size: 28rpx; line-height: 68rpx; }
+.search-clear { padding: 10rpx; font-size: 24rpx; color: #c0c0c0; }
+
+/* 统计卡片 */
+.stats-row { display: flex; gap: 12rpx; margin-bottom: 16rpx; }
+.stat-card {
+  flex: 1; background: #fff; border-radius: 16rpx;
+  padding: 20rpx 16rpx; text-align: center; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.stat-value { display: block; font-size: 32rpx; font-weight: 700; color: #1a1a1a; }
+.stat-label { display: block; font-size: 22rpx; color: #8c8c8c; margin-top: 6rpx; }
+.stat-profit .stat-value { color: #07c160; }
+.stat-cost .stat-value { color: #1989fa; }
+.stat-rate .stat-value { color: #07c160; }
+
+/* 商品卡片 */
+.goods-list { display: flex; flex-direction: column; gap: 16rpx; }
+.goods-card {
+  background: #fff; border-radius: 16rpx;
+  padding: 20rpx 20rpx 16rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.goods-card:active { opacity: 0.9; }
+
+/* 顶栏 */
+.card-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 14rpx;
+}
+.card-left { flex: 1; margin-right: 12rpx; }
+.card-order {
+  font-size: 22rpx;
+  color: #c0c0c0;
+  margin-right: 8rpx;
+}
+.card-name {
+  display: block; font-size: 30rpx; font-weight: 600;
+  color: #1a1a1a; line-height: 1.4;
+}
+.card-platform-row {
+  display: flex; align-items: center; gap: 6rpx;
+  margin-top: 6rpx;
+}
+.card-platform { font-size: 22rpx; color: #8c8c8c; }
+
+/* 利润标签（右上角） */
+.profit-tag {
+  display: flex; align-items: center; gap: 6rpx;
+  padding: 6rpx 14rpx; border-radius: 20rpx;
+  font-size: 24rpx; font-weight: 600;
+  white-space: nowrap;
+}
+.profit-profit { background: #e8f8ef; color: #07c160; }
+.profit-loss { background: #ffeeee; color: #fa5151; }
+.profit-zero { background: #f5f5f5; color: #8c8c8c; }
+.profit-arrow { font-size: 26rpx; font-weight: 700; }
+
+/* 成本卖价标签 */
+.card-detail { display: flex; gap: 12rpx; margin-bottom: 14rpx; }
+.detail-chip {
+  padding: 6rpx 14rpx; background: #f7f8fa; border-radius: 6rpx;
+  font-size: 22rpx; color: #8c8c8c;
+}
+
+/* 底栏 */
+.card-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 14rpx; border-top: 2rpx solid #eee;
+}
+.card-date { font-size: 20rpx; color: #c0c0c0; }
+
+/* 操作按钮 */
+.card-actions { display: flex; gap: 8rpx; }
+.act-btn {
+  width: 48rpx; height: 48rpx; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; background: #f5f5f5; font-size: 22rpx;
+}
+.act-btn:active { background: #e0e0e0; }
+.act-del:active { background: #ffeeee; }
+
+/* 空状态 */
+.empty-state { padding: 120rpx 40rpx; text-align: center; }
+.empty-icon { font-size: 80rpx; display: block; margin-bottom: 20rpx; opacity: 0.3; }
+.empty-text { font-size: 28rpx; color: #c0c0c0; }

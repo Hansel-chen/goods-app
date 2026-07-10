@@ -1,0 +1,80 @@
+<!-- pages/list/list.wxml -->
+<view class="page">
+
+  <!-- 搜索栏 -->
+  <view class="search-wrap">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="搜索商品名称或平台" 
+        bindinput="onSearchInput" value="{{searchKeyword}}" />
+      <text class="search-clear" wx:if="{{searchKeyword}}" bindtap="clearSearch">✕</text>
+    </view>
+  </view>
+
+  <!-- 时间筛选 -->
+  <view class="date-filter">
+    <picker mode="date" bindchange="onDateStartChange">
+      <view class="date-pick {{dateStart ? 'active' : ''}}">{{dateStart || '开始日期'}}</view>
+    </picker>
+    <text class="date-sep">～</text>
+    <picker mode="date" bindchange="onDateEndChange">
+      <view class="date-pick {{dateEnd ? 'active' : ''}}">{{dateEnd || '结束日期'}}</view>
+    </picker>
+    <view class="date-clear" wx:if="{{dateStart || dateEnd}}" bindtap="clearDateFilter">✕</view>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="stats-row">
+    <view class="stat-card stat-profit">
+      <text class="stat-value profit">¥{{totalProfit}}</text>
+      <text class="stat-label">总利润</text>
+    </view>
+    <view class="stat-card stat-cost">
+      <text class="stat-value">¥{{totalCost}}</text>
+      <text class="stat-label">总成本</text>
+    </view>
+    <view class="stat-card stat-rate">
+      <text class="stat-value">{{totalProfitRate}}</text>
+      <text class="stat-label">总利润率</text>
+    </view>
+  </view>
+
+
+  <!-- 商品列表 -->
+  <view class="goods-list">
+    <view class="goods-card" wx:for="{{filteredList}}" wx:key="id" 
+      bindtap="goToDetail" data-id="{{item.id}}">
+      
+        <view class="card-top">
+          <view class="card-left">
+            <text class="card-order">#{{item.orderNo}}</text>
+            <text class="card-name">{{item.name}}</text>
+            <view class="card-platform-row">
+              <text class="card-platform">{{item.platform}}</text>
+            </view>
+          </view>
+          <view class="profit-tag profit-{{item.profitType}}">
+            <text class="profit-arrow">{{item.profitType === 'profit' ? '↑' : (item.profitType === 'loss' ? '↓' : '–')}}</text>
+            <text>¥{{item.profit}}</text>
+          </view>
+        </view>
+
+      <!-- 中间：成本/卖价/手续费/运费 紧凑一行 -->
+      <view class="card-detail">
+        <text class="detail-chip">成本 ¥{{item.cost}}</text>
+        <text class="detail-chip">卖价 ¥{{item.salePrice}}</text>
+      </view>
+
+      <!-- 底栏：日期和操作 -->
+      <view class="card-bottom">
+        <text class="card-date">{{item.receiptDate || item.paymentDate}}</text>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{filteredList.length === 0}}">
+      <text class="empty-icon">📦</text>
+      <text class="empty-text">暂无记录</text>
+    </view>
+  </view>
+
+</view>

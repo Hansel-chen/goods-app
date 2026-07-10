@@ -1,0 +1,60 @@
+<view class="page">
+  <form bindsubmit="onSubmit" report-submit>
+
+    <view class="card">
+      <view class="section-title">商品信息</view>
+
+      <view class="input-group">
+        <text class="input-label required">商品名称</text>
+        <input class="input-field" name="name" placeholder="致态Ti600 1Tb硬盘" value="{{formData.name}}" />
+      </view>
+
+      <view class="input-group">
+        <text class="input-label required">平台</text>
+        <input class="input-field" name="platform" placeholder="拼多多、淘宝、闲鱼" value="{{formData.platform}}" />
+      </view>
+
+      <view class="input-group">
+        <text class="input-label required">付款日期</text>
+        <picker mode="date" value="{{formData.paymentDate}}" bindchange="onPaymentDateChange">
+          <view class="picker-field">{{formData.paymentDate || '请选择'}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="section-title">金额信息</view>
+
+      <view class="form-row">
+        <view class="input-group flex-1">
+          <text class="input-label required">成本</text>
+          <input class="input-field" name="cost" type="digit" placeholder="0.00"
+            value="{{formData.cost}}" data-field="cost" bindinput="onAmountInput" />
+        </view>
+        <view class="input-group flex-1">
+          <text class="input-label required">卖价</text>
+          <input class="input-field" name="salePrice" type="digit" placeholder="0.00"
+            value="{{formData.salePrice}}" data-field="salePrice" bindinput="onAmountInput" />
+        </view>
+      </view>
+
+      <view class="form-row">
+        <view class="input-group flex-1">
+          <text class="input-label">手续费</text>
+          <input class="input-field" name="fee" type="digit" placeholder="0.00"
+            value="{{formData.fee}}" data-field="fee" bindinput="onAmountInput" />
+        </view>
+        <view class="input-group flex-1">
+          <text class="input-label">运费</text>
+          <input class="input-field" name="shippingFee" type="digit" placeholder="0.00"
+            value="{{formData.shippingFee}}" data-field="shippingFee" bindinput="onAmountInput" />
+        </view>
+      </view>
+    </view>
+
+    <view class="form-actions">
+      <button class="btn btn-primary btn-block" formType="submit">✓ 提交记录</button>
+      <button class="btn btn-ghost btn-block" bindtap="onCancel">取消</button>
+    </view>
+  </form>
+</view>

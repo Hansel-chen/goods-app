@@ -1,0 +1,69 @@
+<!-- pages/shares/shares.wxml -->
+<view class="page">
+
+  <!-- 时间筛选 -->
+  <view class="date-filter">
+    <picker mode="date" bindchange="onDateStartChange">
+      <view class="date-pick {{dateStart ? 'active' : ''}}">{{dateStart || '开始日期'}}</view>
+    </picker>
+    <text class="date-sep">～</text>
+    <picker mode="date" bindchange="onDateEndChange">
+      <view class="date-pick {{dateEnd ? 'active' : ''}}">{{dateEnd || '结束日期'}}</view>
+    </picker>
+    <view class="date-clear" wx:if="{{dateStart || dateEnd}}" bindtap="clearDateFilter">✕</view>
+  </view>
+
+  <!-- 总分成交互卡片 -->
+  <view class="share-summary">
+    <view class="summary-card" wx:for="{{shareSummary}}" wx:key="id" 
+      style="background: {{item.color}};"
+      bindtap="selectMember" data-index="{{item.index}}">
+      <text class="summary-name">{{item.name}}</text>
+      <text class="summary-amount">¥{{item.total}}</text>
+      <text class="summary-count">{{item.count}} 笔</text>
+    </view>
+  </view>
+
+
+  <!-- 成员选择器 -->
+  <view class="card member-selector">
+    <view class="member-option {{selectedMemberIndex === index ? 'active' : ''}}"
+      wx:for="{{shareMembers}}" wx:key="id" data-index="{{index}}"
+      bindtap="selectMemberByIndex">
+      <text class="option-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 明细列表 -->
+  <view class="section-title" wx:if="{{shareDetails.length > 0}}">
+    {{selectedMemberName}} 的分成明细
+  </view>
+
+  <view class="detail-list">
+    <view class="detail-card" wx:for="{{shareDetails}}" wx:key="id">
+      <view class="detail-top">
+        <text class="detail-order">#{{item.orderNo}}</text>
+        <text class="detail-name">{{item.name}}</text>
+      </view>
+      <view class="detail-body">
+        <view class="detail-meta">
+          <text class="meta-key">利润</text>
+          <text class="meta-val">¥{{item.profit}}</text>
+        </view>
+        <view class="detail-meta highlight">
+          <text class="meta-key">分成比例</text>
+          <text class="meta-val share-val">{{item.shareRatio}}</text>
+        </view>
+        <view class="detail-meta highlight">
+          <text class="meta-key">分成金额</text>
+          <text class="meta-val share-val">¥{{item.shareAmount}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{shareDetails.length === 0}}">
+    <text class="empty-icon">📊</text>
+    <text class="empty-text">暂无分成记录</text>
+  </view>
+</view>
