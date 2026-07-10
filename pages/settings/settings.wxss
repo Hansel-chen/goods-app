@@ -77,6 +77,19 @@
 }
 .member-name.disabled { color: #8c8c8c; }
 
+.member-right {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.delete-btn {
+  width: 40rpx; height: 40rpx; border-radius: 50%;
+  background: #f0f0f0; color: #999;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22rpx; flex-shrink: 0;
+}
+.delete-btn:active { background: #ffd9d9; color: #fa5151; }
+
 .add-bar {
   background: #fff;
   border-radius: 16rpx;
@@ -152,10 +165,12 @@
 
 .modal-input {
   width: 100%;
-  padding: 22rpx 24rpx;
+  height: 72rpx;
+  padding: 0 24rpx;
   border: 2rpx solid #eee;
   border-radius: 8rpx;
   font-size: 28rpx;
+  line-height: 72rpx;
   margin-bottom: 8rpx;
   box-sizing: border-box;
 }

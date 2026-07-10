@@ -42,8 +42,13 @@
   <view class="detail-list">
     <view class="detail-card" wx:for="{{shareDetails}}" wx:key="id">
       <view class="detail-top">
-        <text class="detail-order">#{{item.orderNo}}</text>
-        <text class="detail-name">{{item.name}}</text>
+        <view class="detail-name-row">
+          <text class="detail-order">#{{item.orderNo}}</text>
+          <text class="detail-name">{{item.name}}</text>
+        </view>
+        <view class="card-platform-row" wx:if="{{item.platform}}">
+          <text class="card-platform">{{item.platform}}</text>
+        </view>
       </view>
       <view class="detail-body">
         <view class="detail-meta">

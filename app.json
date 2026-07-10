@@ -6,7 +6,8 @@
     "pages/settings/settings",
     "pages/add/add",
     "pages/edit/edit",
-    "pages/detail/detail"
+    "pages/detail/detail",
+    "pages/webview/webview"
   ],
   "window": {
     "backgroundTextStyle": "light",

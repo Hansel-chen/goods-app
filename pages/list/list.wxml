@@ -47,9 +47,11 @@
       
         <view class="card-top">
           <view class="card-left">
-            <text class="card-order">#{{item.orderNo}}</text>
-            <text class="card-name">{{item.name}}</text>
-            <view class="card-platform-row">
+            <view class="card-name-row">
+              <text class="card-order">#{{item.orderNo}}</text>
+              <text class="card-name">{{item.name}}</text>
+            </view>
+            <view class="card-platform-row" wx:if="{{item.platform}}">
               <text class="card-platform">{{item.platform}}</text>
             </view>
           </view>
@@ -63,6 +65,12 @@
       <view class="card-detail">
         <text class="detail-chip">成本 ¥{{item.cost}}</text>
         <text class="detail-chip">卖价 ¥{{item.salePrice}}</text>
+      </view>
+
+      <view class="card-tracking" wx:if="{{item.trackingNo}}">
+        <text class="tracking-label">📦</text>
+        <text class="tracking-no">{{item.trackingNo}}</text>
+        <text class="tracking-btn" catchtap="viewTracking" data-nu="{{item.trackingNo}}">查物流</text>
       </view>
 
       <!-- 底栏：日期和操作 -->

@@ -8,6 +8,127 @@
 }
 .flex-1 { flex: 1; }
 
+/* 平台快速选择 */
+.platform-chips {
+  display: flex; flex-wrap: wrap; gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+.platform-chip {
+  padding: 10rpx 24rpx; border-radius: 8rpx;
+  font-size: 24rpx; background: #f5f5f5; color: #666;
+}
+.platform-chip.on {
+  background: #f0f7ff; color: #1989fa; font-weight: 600;
+}
+.platform-chip:active { opacity: 0.7; }
+
+/* 快速方案 */
+.preset-bar {
+  margin-bottom: 20rpx;
+}
+.preset-label {
+  display: block;
+  font-size: 24rpx;
+  color: #8c8c8c;
+  margin-bottom: 10rpx;
+}
+.preset-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+.preset-inner {
+  display: inline-flex;
+  gap: 12rpx;
+}
+.preset-btn {
+  display: inline-block;
+  padding: 12rpx 24rpx;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+  background: #e8f8ee;
+  color: #07c160;
+  white-space: nowrap;
+  border: none;
+}
+.preset-btn:active { opacity: 0.7; }
+
+/* 分配模式提示 */
+.assign-hint {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #f0f7ff; border-radius: 8rpx; padding: 12rpx 16rpx;
+  margin-bottom: 12rpx;
+}
+.assign-text { font-size: 24rpx; color: #1989fa; flex: 1; }
+.assign-cancel { font-size: 24rpx; color: #999; padding: 4rpx 12rpx; }
+
+/* 分成输入 */
+.share-inputs {
+  margin-bottom: 8rpx;
+}
+.share-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+.share-badge {
+  width: 60rpx; height: 40rpx; border-radius: 8rpx;
+  border: 2rpx dashed #ddd; display: flex;
+  align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 20rpx; color: #ccc;
+}
+.share-badge.selectable {
+  border-color: #07c160; border-style: solid;
+}
+.share-badge.assigned {
+  border-color: #1989fa; border-style: solid;
+  background: #f0f7ff; color: #1989fa; font-weight: 700; font-size: 22rpx;
+}
+.share-label {
+  width: 60rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.share-control {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+.share-input {
+  flex: 1;
+  height: 56rpx;
+  padding: 0 16rpx !important;
+  line-height: 56rpx !important;
+}
+.share-pct {
+  font-size: 24rpx;
+  color: #c0c0c0;
+  width: 30rpx;
+}
+.share-amount {
+  width: 130rpx;
+  text-align: right;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #07c;
+}
+
+/* 利润预览 */
+.profit-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 2rpx solid #eee;
+}
+.profit-label { font-size: 24rpx; color: #8c8c8c; }
+.profit-num { font-size: 30rpx; font-weight: 700; }
+.text-green { color: #07c160; }
+.text-red { color: #fa5151; }
+
 .form-actions {
   display: flex;
   flex-direction: column;

@@ -97,24 +97,36 @@
 }
 .detail-top {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 4rpx;
   margin-bottom: 12rpx;
   padding-bottom: 12rpx;
   border-bottom: 2rpx solid #eee;
+  min-width: 0;
+}
+.detail-name-row {
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 .detail-order {
   font-size: 22rpx;
   color: #c0c0c0;
   margin-right: 8rpx;
+  flex-shrink: 0;
 }
 .detail-name {
   font-size: 28rpx;
   font-weight: 600;
   color: #1a1a1a;
   flex: 1;
-  margin-right: 12rpx;
+  min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+.card-platform-row {
+  display: flex; align-items: center; gap: 6rpx;
+}
+.card-platform { font-size: 20rpx; color: #1989fa; background: #f0f7ff; padding: 2rpx 12rpx; border-radius: 6rpx; }
 .detail-body {
   display: flex;
   gap: 0;

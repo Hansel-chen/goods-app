@@ -53,6 +53,13 @@
         <text class="s-label">运费</text>
         <text class="s-value">¥{{item.shippingFee || '0.00'}}</text>
       </view>
+      <view class="supplement-item" wx:if="{{item.trackingNo}}">
+        <text class="s-label">物流单号</text>
+        <view class="s-value" style="display:flex;align-items:center;gap:8rpx;flex-wrap:wrap">
+          <text style="color:#1989fa">{{item.trackingNo}}</text>
+          <text class="detail-tracking-btn" catchtap="viewTracking" data-nu="{{item.trackingNo}}">查物流</text>
+        </view>
+      </view>
     </view>
   </view>
 

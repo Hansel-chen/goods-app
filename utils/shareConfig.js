@@ -74,6 +74,16 @@ function getActiveMembers() {
   return getMembers().filter(m => m.active);
 }
 
+// 永久删除成员
+function deleteMember(id) {
+  const members = getMembers();
+  const idx = members.findIndex(m => m.id === id);
+  if (idx === -1) return false;
+  members.splice(idx, 1);
+  saveMembers(members);
+  return true;
+}
+
 // 重置为默认配置
 function resetToDefault() {
   saveMembers(DEFAULT_MEMBERS);
@@ -87,5 +97,6 @@ module.exports = {
   addMember,
   updateMember,
   removeMember,
+  deleteMember,
   resetToDefault
 };

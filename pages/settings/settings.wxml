@@ -20,7 +20,10 @@
       </view>
       <text class="member-name">{{item.name}}</text>
     </view>
-    <switch checked="{{item.active}}" bindchange="toggleMember" data-id="{{item.id}}" color="#07c160" />
+    <view class="member-right">
+      <switch checked="{{item.active}}" bindchange="toggleMember" data-id="{{item.id}}" color="#07c160" />
+      <view class="delete-btn" bindtap="deleteMember" data-id="{{item.id}}" data-name="{{item.name}}">✕</view>
+    </view>
   </view>
 
   <!-- 添加按钮 -->
@@ -43,7 +46,10 @@
         </view>
         <text class="member-name disabled">{{item.name}}</text>
       </view>
-      <switch checked="{{item.active}}" bindchange="toggleMember" data-id="{{item.id}}" color="#07c160" />
+      <view class="member-right">
+        <switch checked="{{item.active}}" bindchange="toggleMember" data-id="{{item.id}}" color="#07c160" />
+        <view class="delete-btn" bindtap="deleteMember" data-id="{{item.id}}" data-name="{{item.name}}">✕</view>
+      </view>
     </view>
   </view>
 

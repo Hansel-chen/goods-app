@@ -1,22 +1,27 @@
 <view class="page">
 
   <view class="stats-grid">
-    <view class="stat-item bg-unsold">
+    <view class="stat-item bg-unsold {{statusFilter === 'unsold' ? 'active' : ''}}" bindtap="filterByStat" data-status="unsold">
       <text class="stat-num">{{stats.unsold}}</text>
       <text class="stat-label">未售出</text>
     </view>
-    <view class="stat-item bg-selling">
+    <view class="stat-item bg-selling {{statusFilter === 'selling' ? 'active' : ''}}" bindtap="filterByStat" data-status="selling">
       <text class="stat-num">{{stats.selling}}</text>
       <text class="stat-label">在售中</text>
     </view>
-    <view class="stat-item bg-sold">
+    <view class="stat-item bg-sold {{statusFilter === 'sold' ? 'active' : ''}}" bindtap="filterByStat" data-status="sold">
       <text class="stat-num">{{stats.sold}}</text>
       <text class="stat-label">已售出</text>
     </view>
-    <view class="stat-item bg-cost">
+    <view class="stat-item bg-cost {{statusFilter === 'all' ? 'active' : ''}}" bindtap="filterByStat" data-status="all">
       <text class="stat-num">¥{{stats.totalCostText}}</text>
       <text class="stat-label">总成本</text>
     </view>
+  </view>
+
+  <view class="filter-hint" wx:if="{{statusFilter !== 'all'}}" bindtap="filterByStat" data-status="all">
+    <text class="filter-hint-text">只看：{{filterOptions[filterIndex].text}}</text>
+    <text class="filter-hint-clear">✕ 清除</text>
   </view>
 
   <view class="date-filter">
@@ -62,8 +67,10 @@
             <text class="check-icon">{{item._sel ? '✓' : ''}}</text>
           </view>
           <view class="item-name-wrap">
-            <text class="item-order">#{{item.orderNo}}</text>
-            <text class="item-name">{{item.name}}</text>
+            <view class="item-name-row">
+              <text class="item-order">#{{item.orderNo}}</text>
+              <text class="item-name">{{item.name}}</text>
+            </view>
             <text class="item-source" wx:if="{{item.platform}}">📌 {{item.platform}}</text>
           </view>
         </view>
@@ -93,6 +100,12 @@
         </view>
       </view>
 
+      <view class="item-tracking" wx:if="{{item.trackingNo}}">
+        <text class="tracking-label">📦</text>
+        <text class="tracking-no">{{item.trackingNo}}</text>
+        <text class="tracking-btn" catchtap="viewTracking" data-nu="{{item.trackingNo}}">查物流</text>
+      </view>
+
       <view class="item-footer">
         <view class="item-actions">
           <button class="act-btn act-edit" bindtap="goToEdit" data-id="{{item.id}}">✏️ 编辑</button>
@@ -119,6 +132,10 @@
         <text class="opt-icon">🟢</text>
         <text>在售中</text>
       </view>
+      <view class="modal-option {{batchStatus === 'shipping' ? 'active' : ''}}" bindtap="setBatchStatus" data-status="shipping">
+        <text class="opt-icon">🔵</text>
+        <text>运输中</text>
+      </view>
       <view class="modal-option {{batchStatus === 'unsold' ? 'active' : ''}}" bindtap="setBatchStatus" data-status="unsold">
         <text class="opt-icon">🟠</text>
         <text>未售出</text>
@@ -127,6 +144,20 @@
     <view class="modal-actions">
       <button class="btn btn-ghost" bindtap="hideStatusDialog">取消</button>
       <button class="btn btn-primary" bindtap="confirmBatchUpdate">确认</button>
+    </view>
+  </view>
+</view>
+
+<view class="modal-overlay {{showTrackingModal ? 'show' : ''}}" bindtap="cancelTracking">
+  <view class="modal-box" catchtap="preventBubble">
+    <view class="modal-title">标记运输中</view>
+    <view class="input-group">
+      <text class="input-label required">物流单号</text>
+      <input class="modal-input" placeholder="输入快递单号" value="{{trackingNo}}" bindinput="onTrackingInput" />
+    </view>
+    <view class="modal-actions">
+      <button class="btn btn-ghost" bindtap="cancelTracking">取消</button>
+      <button class="btn btn-primary" bindtap="confirmTracking">确认</button>
     </view>
   </view>
 </view>

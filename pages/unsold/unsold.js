@@ -19,6 +19,7 @@ Page({
       { value: 'all', text: '全部' },
       { value: 'unsold', text: '未售出' },
       { value: 'selling', text: '在售中' },
+      { value: 'shipping', text: '运输中' },
       { value: 'sold', text: '已售出' }
     ],
     batchMode: false,
@@ -29,15 +30,20 @@ Page({
     statusOptions: [
       { value: 'unsold', text: '未售出' },
       { value: 'selling', text: '在售中' },
+      { value: 'shipping', text: '运输中' },
       { value: 'sold', text: '已售出' }
     ],
     batchOptions: [
       { value: 'unsold', text: '未售出' },
       { value: 'selling', text: '在售中' },
+      { value: 'shipping', text: '运输中' },
       { value: 'sold', text: '已售出' }
     ],
     dateStart: '',
     dateEnd: '',
+    showTrackingModal: false,
+    trackingItemId: '',
+    trackingNo: '',
     showSoldModal: false,
     soldItemId: '',
     soldReceiptDate: '',
@@ -85,7 +91,7 @@ Page({
     const stats = { unsold: 0, selling: 0, sold: 0, totalCost: 0, expectedProfit: 0 };
     this.data.unsoldList.forEach(i => {
       if (i.status === 'unsold') stats.unsold++;
-      if (i.status === 'selling') stats.selling++;
+      if (i.status === 'selling' || i.status === 'shipping') stats.selling++;
       if (i.status === 'sold') stats.sold++;
       stats.totalCost = round2(stats.totalCost + (parseFloat(i.cost) || 0));
       stats.expectedProfit = round2(stats.expectedProfit + (parseFloat(i.expectedProfit) || 0));
@@ -97,6 +103,15 @@ Page({
         expectedProfitText: stats.expectedProfit.toFixed(0)
       }
     });
+  },
+
+  filterByStat(e) {
+    const status = e.currentTarget.dataset.status;
+    const idx = this.data.filterOptions.findIndex(o => o.value === status);
+    const updates = { statusFilter: status, filterIndex: idx >= 0 ? idx : 0 };
+    if (status === 'all' || status === 'sold') updates.batchMode = false;
+    this.setData(updates);
+    this.applyFilters();
   },
 
   setStatusFilter(e) {
@@ -111,7 +126,9 @@ Page({
   applyFilters() {
     const { statusFilter, unsoldList, dateStart, dateEnd, searchKeyword } = this.data;
     let filtered = unsoldList;
-    if (statusFilter !== 'all') filtered = filtered.filter(i => i.status === statusFilter);
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(i => statusFilter === 'selling' ? (i.status === 'selling' || i.status === 'shipping') : i.status === statusFilter);
+    }
     if (dateStart) filtered = filtered.filter(i => (i.paymentDate || '') >= dateStart);
     if (dateEnd) filtered = filtered.filter(i => (i.paymentDate || '') <= dateEnd);
 
@@ -121,7 +138,7 @@ Page({
       (i.orderNo && i.orderNo.includes(keyword))
     );
 
-    const sortOrder = { selling: 0, unsold: 1, sold: 2 };
+    const sortOrder = { selling: 0, shipping: 0, unsold: 1, sold: 2 };
     filtered = [...filtered].sort((a, b) => {
       const statusDiff = (sortOrder[a.status] ?? 3) - (sortOrder[b.status] ?? 3);
       if (statusDiff !== 0) return statusDiff;
@@ -178,6 +195,13 @@ Page({
         soldDateInValid: false,
         soldDateFuture: false
       });
+    } else if (opt.value === 'shipping') {
+      const item = dataManager.getById(id);
+      this.setData({
+        showTrackingModal: true,
+        trackingItemId: id,
+        trackingNo: item.trackingNo || ''
+      });
     } else {
       const updates = { status: opt.value, statusText: opt.text, receiptDate: '' };
       dataManager.update(id, updates);
@@ -191,6 +215,23 @@ Page({
     const v = parseFloat(e.detail.value) || 0;
     dataManager.update(id, { expectedPrice: v });
     this.loadData();
+  },
+
+  cancelTracking() { this.setData({ showTrackingModal: false }); },
+
+  onTrackingInput(e) { this.setData({ trackingNo: e.detail.value }); },
+
+  confirmTracking() {
+    const no = this.data.trackingNo.trim();
+    if (!no) return wx.showToast({ title: '请输入物流单号', icon: 'none' });
+    dataManager.update(this.data.trackingItemId, {
+      status: 'shipping',
+      statusText: '运输中',
+      trackingNo: no
+    });
+    this.setData({ showTrackingModal: false });
+    this.loadData();
+    wx.showToast({ title: '已标记为运输中', icon: 'success' });
   },
 
   cancelSold() { this.setData({ showSoldModal: false }); },
@@ -255,7 +296,38 @@ Page({
     selectedIds.forEach(id => dataManager.update(id, { status: batchStatus, statusText: text }));
     this.setData({ showStatusModal: false, batchMode: false, selectedIds: [] });
     this.loadData();
-    wx.showToast({ title: `已更新 ${selectedIds.length} 条`, icon: 'success' });
+    const msg = batchStatus === 'shipping' ? `已更新 ${selectedIds.length} 条，请逐一添加物流单号` : `已更新 ${selectedIds.length} 条`;
+    wx.showToast({ title: msg, icon: 'none', duration: 2000 });
+  },
+
+  viewTracking(e) {
+    const nu = e.currentTarget.dataset.nu;
+    const apiUrl = dataManager.getApiBase();
+    if (!apiUrl) {
+      wx.setClipboardData({ data: nu, success: () => wx.showToast({ title: '物流单号已复制', icon: 'success' }) });
+      return;
+    }
+    wx.showLoading({ title: '查询中...' });
+    wx.request({
+      url: apiUrl + '/api/tracking?nu=' + encodeURIComponent(nu),
+      timeout: 10000,
+      success: res => {
+        wx.hideLoading();
+        const d = res.data;
+        if (res.statusCode !== 200) {
+          wx.showModal({ title: '查询失败', content: '后端返回 ' + res.statusCode + '，可能未部署最新代码', showCancel: false });
+        } else if (d && d.data && d.data.length > 0) {
+          const logs = d.data.map(item => item.context || item.ftime || '').join('\n');
+          wx.showModal({ title: '物流轨迹', content: logs, showCancel: false });
+        } else {
+          wx.showModal({ title: '暂无轨迹', content: d.message || '未查询到物流信息', showCancel: false });
+        }
+      },
+      fail: err => {
+        wx.hideLoading();
+        wx.showModal({ title: '查询失败', content: '请检查：\n1. 设置页的服务器地址是否正确\n2. 后端是否已部署最新代码\n3. 网络是否正常', showCancel: false });
+      }
+    });
   },
 
   goToEdit(e) {

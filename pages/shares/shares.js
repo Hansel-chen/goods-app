@@ -27,11 +27,22 @@ Page({
     const allItems = dataManager.getAll();
     const members = shareConfig.getActiveMembers();
 
+    // 默认选中分成笔数最多的人
+    let bestIdx = 0;
+    if (members.length > 0) {
+      let maxCnt = -1;
+      const soldItems = allItems.filter(i => i.status === 'sold');
+      members.forEach((m, i) => {
+        const cnt = soldItems.filter(item => (parseFloat(item[`${m.id}Ratio`]) || 0) > 0).length;
+        if (cnt > maxCnt) { maxCnt = cnt; bestIdx = i; }
+      });
+    }
+
     this.setData({
       shareMembers: members,
       allItems,
-      selectedMemberIndex: 0,
-      selectedMemberName: members.length > 0 ? members[0].name : ''
+      selectedMemberIndex: bestIdx,
+      selectedMemberName: members.length > 0 ? members[bestIdx].name : ''
     });
     this.applyFilters();
   },

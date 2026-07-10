@@ -98,6 +98,21 @@ Page({
     });
   },
 
+  deleteMember(e) {
+    const id = e.currentTarget.dataset.id;
+    const name = e.currentTarget.dataset.name;
+    wx.showModal({
+      title: '确认删除',
+      content: `确定删除「${name}」吗？已设置的分成比例不受影响。`,
+      success: (res) => {
+        if (!res.confirm) return;
+        shareConfig.deleteMember(id);
+        this.loadMembers();
+        wx.showToast({ title: '已删除', icon: 'success' });
+      }
+    });
+  },
+
   resetToDefault() {
     wx.showModal({
       title: '确认重置',

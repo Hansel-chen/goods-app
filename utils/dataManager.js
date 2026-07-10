@@ -6,6 +6,7 @@ let API_BASE = '';
 function setApiBase(url) {
   API_BASE = url.replace(/\/+$/, '');
 }
+function getApiBase() { return API_BASE; }
 
 function round2(num) {
   return Math.round(num * 100 + (num >= 0 ? 0.0001 : -0.0001)) / 100;
@@ -242,5 +243,6 @@ module.exports = {
   calculateProfitAndShare,
   assignOrderNos,
   setApiBase,
+  getApiBase,
   syncPull
 };

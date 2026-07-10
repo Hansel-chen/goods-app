@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -74,6 +75,34 @@ app.delete('/api/goods/:id', (req, res) => {
 app.put('/api/goods', (req, res) => {
   writeData(req.body);
   res.json({ success: true, count: req.body.length });
+});
+
+// 物流查询（代理快递100公开接口）
+function httpsGet(url) {
+  return new Promise((resolve, reject) => {
+    const opts = new URL(url);
+    https.get({ hostname: opts.hostname, path: opts.pathname + opts.search, headers: { 'User-Agent': 'Mozilla/5.0' } }, res => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try { resolve(JSON.parse(data)); } catch (e) { resolve({ error: 'parse error', raw: data.slice(0, 500) }); }
+      });
+    }).on('error', reject);
+  });
+}
+
+app.get('/api/tracking', async (req, res) => {
+  const nu = req.query.nu;
+  if (!nu) return res.json({ error: 'missing nu' });
+  console.log(`[tracking] query: ${nu}`);
+  try {
+    const data = await httpsGet(`https://www.kuaidi100.com/query?type=auto&postid=${encodeURIComponent(nu)}`);
+    console.log(`[tracking] result:`, JSON.stringify(data).slice(0, 200));
+    res.json(data);
+  } catch (e) {
+    console.error(`[tracking] error:`, e.message);
+    res.json({ error: e.message });
+  }
 });
 
 app.listen(PORT, () => {

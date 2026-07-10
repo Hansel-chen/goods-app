@@ -73,13 +73,20 @@
         </scroll-view>
       </view>
 
+      <view class="assign-hint" wx:if="{{pendingSlots}}">
+        <text class="assign-text">分配: {{assignTarget}} — 点击成员分配</text>
+        <text class="assign-cancel" bindtap="cancelAssign">取消</text>
+      </view>
       <view class="share-inputs">
-        <view class="share-row" wx:for="{{shareMembers}}" wx:key="id">
+        <view class="share-row" wx:for="{{shareMembers}}" wx:key="id" bindtap="assignSlot" data-id="{{item.id}}">
+          <view class="share-badge {{parseFloat(formData[item.id + 'Ratio']) > 0 ? 'assigned' : ''}} {{pendingSlots ? 'selectable' : ''}}">
+            <text class="badge-num">{{parseFloat(formData[item.id + 'Ratio']) > 0 ? formData[item.id + 'Ratio'] + '%' : (pendingSlots ? '+' : '')}}</text>
+          </view>
           <text class="share-label">{{item.name}}</text>
           <view class="share-control">
             <input class="input-field share-input" name="{{item.id}}Ratio" type="digit"
               placeholder="0" value="{{formData[item.id + 'Ratio']}}"
-              data-field="{{item.id}}Ratio" bindinput="onRatioInput" />
+              data-field="{{item.id}}Ratio" bindinput="onRatioInput" catchtap />
             <text class="share-pct">%</text>
           </view>
           <text class="share-amount">¥{{calculatedShares[item.id]}}</text>
