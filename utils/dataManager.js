@@ -73,6 +73,7 @@ function getById(id) {
 function saveAll(list) {
   try {
     wx.setStorageSync(STORAGE_KEY, list);
+    syncPush();
     return true;
   } catch (e) {
     return false;
@@ -101,7 +102,6 @@ function add(item) {
   };
   list.unshift(newItem);
   saveAll(list);
-  syncAdd(newItem);
   return newItem;
 }
 
@@ -122,7 +122,6 @@ function update(id, item) {
       updateTime: new Date().toISOString()
     };
     saveAll(list);
-    syncUpdate(id, list[index]);
     return list[index];
   }
   return null;
@@ -132,7 +131,6 @@ function deleteItem(id) {
   const list = getAll();
   const newList = list.filter(item => item.id !== id);
   saveAll(newList);
-  syncDelete(id);
   return true;
 }
 
@@ -201,31 +199,14 @@ function apiUrl(path) {
   return API_BASE + path;
 }
 
-function syncAdd(item) {
+function syncPush() {
   if (!API_BASE) return;
+  const local = getAll();
+  if (local.length === 0) return;
   wx.request({
     url: apiUrl('/api/goods'),
-    method: 'POST',
-    data: item,
-    fail() {}
-  });
-}
-
-function syncUpdate(id, item) {
-  if (!API_BASE) return;
-  wx.request({
-    url: apiUrl('/api/goods/' + id),
     method: 'PUT',
-    data: item,
-    fail() {}
-  });
-}
-
-function syncDelete(id) {
-  if (!API_BASE) return;
-  wx.request({
-    url: apiUrl('/api/goods/' + id),
-    method: 'DELETE',
+    data: local,
     fail() {}
   });
 }
@@ -248,21 +229,6 @@ function syncPull() {
   });
 }
 
-function syncPush() {
-  return new Promise((resolve) => {
-    if (!API_BASE) return resolve(false);
-    const local = getAll();
-    if (local.length === 0) return resolve(false);
-    wx.request({
-      url: apiUrl('/api/goods'),
-      method: 'PUT',
-      data: local,
-      success() { resolve(true); },
-      fail() { resolve(false); }
-    });
-  });
-}
-
 module.exports = {
   getAll,
   getById,
@@ -276,6 +242,5 @@ module.exports = {
   calculateProfitAndShare,
   assignOrderNos,
   setApiBase,
-  syncPull,
-  syncPush
+  syncPull
 };
