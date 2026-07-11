@@ -115,7 +115,17 @@ Page({
 
   viewTracking(e) {
     const nu = e.currentTarget.dataset.nu;
-    wx.navigateTo({ url: '/pages/webview/webview?nu=' + encodeURIComponent(nu) });
+    wx.showModal({
+      title: '物流查询',
+      content: '已复制物流链接，请用浏览器打开查看',
+      confirmText: '复制链接',
+      success: r => {
+        if (r.confirm) wx.setClipboardData({
+          data: 'https://www.kuaidi100.com/query?type=auto&postid=' + encodeURIComponent(nu),
+          success: () => wx.showToast({ title: '链接已复制', icon: 'success' })
+        });
+      }
+    });
   },
 
   goToDetail(e) {

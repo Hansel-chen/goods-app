@@ -3,6 +3,7 @@ Page({
 
   onLoad(options) {
     const nu = options.nu || '';
-    this.setData({ url: 'https://www.kuaidi100.com/chaxun?nu=' + encodeURIComponent(nu) });
+    const url = 'https://www.kuaidi100.com/query?type=auto&postid=' + encodeURIComponent(nu);
+    this.setData({ url });
   }
 });
