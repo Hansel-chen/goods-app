@@ -19,8 +19,6 @@ Page({
   viewTracking(e) {
     const nu = e.currentTarget.dataset.nu;
     wx.navigateTo({ url: '/pages/webview/webview?nu=' + encodeURIComponent(nu) });
-      }
-    });
   },
 
   loadData() {
