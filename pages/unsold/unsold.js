@@ -300,43 +300,9 @@ Page({
     wx.showToast({ title: msg, icon: 'none', duration: 2000 });
   },
 
-  queryTracking(nu) {
-    const apiUrl = dataManager.getApiBase();
-    if (apiUrl) {
-      return new Promise((resolve, reject) => {
-        wx.request({
-          url: apiUrl + '/api/tracking?nu=' + encodeURIComponent(nu),
-          timeout: 10000,
-          success: res => resolve(res.data),
-          fail: reject
-        });
-      });
-    }
-    return new Promise((resolve, reject) => {
-      wx.request({
-        url: 'https://www.kuaidi100.com/query?type=auto&postid=' + encodeURIComponent(nu),
-        timeout: 10000,
-        success: res => resolve(res.data),
-        fail: reject
-      });
-    });
-  },
-
   viewTracking(e) {
     const nu = e.currentTarget.dataset.nu;
-    wx.showLoading({ title: '查询中...' });
-    this.queryTracking(nu).then(d => {
-      wx.hideLoading();
-      if (d && d.data && d.data.length > 0) {
-        const logs = d.data.map(item => item.context || item.ftime || '').join('\n');
-        wx.showModal({ title: '物流轨迹', content: logs, showCancel: false });
-      } else {
-        wx.showModal({ title: '暂无轨迹', content: d.message || '未查询到物流信息', showCancel: false });
-      }
-    }).catch(err => {
-      wx.hideLoading();
-      wx.setClipboardData({ data: nu, success: () => wx.showToast({ title: '查询失败，单号已复制', icon: 'none' }) });
-    });
+    wx.navigateTo({ url: '/pages/webview/webview?nu=' + encodeURIComponent(nu) });
   },
 
   goToEdit(e) {
