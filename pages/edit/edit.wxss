@@ -4,9 +4,9 @@
 
 .form-row {
   display: flex;
-  gap: 20rpx;
+  gap: 16rpx;
 }
-.flex-1 { flex: 1; }
+.flex-1 { flex: 1; min-width: 0; }
 
 /* 快速方案 */
 .preset-bar {
@@ -78,9 +78,11 @@
 }
 .share-control {
   flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 6rpx;
+  overflow: hidden;
 }
 .share-input {
   flex: 1;
@@ -94,11 +96,12 @@
   width: 30rpx;
 }
 .share-amount {
-  width: 130rpx;
+  width: 110rpx;
   text-align: right;
-  font-size: 26rpx;
+  font-size: 24rpx;
   font-weight: 600;
   color: #07c;
+  flex-shrink: 0;
 }
 
 /* 提交按钮 */

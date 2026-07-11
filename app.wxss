@@ -16,6 +16,7 @@ page {
   padding: 28rpx 24rpx;
   margin-bottom: 20rpx;
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+  overflow: hidden;
 }
 
 .section-title {
