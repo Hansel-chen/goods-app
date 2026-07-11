@@ -300,33 +300,42 @@ Page({
     wx.showToast({ title: msg, icon: 'none', duration: 2000 });
   },
 
+  queryTracking(nu) {
+    const apiUrl = dataManager.getApiBase();
+    if (apiUrl) {
+      return new Promise((resolve, reject) => {
+        wx.request({
+          url: apiUrl + '/api/tracking?nu=' + encodeURIComponent(nu),
+          timeout: 10000,
+          success: res => resolve(res.data),
+          fail: reject
+        });
+      });
+    }
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: 'https://www.kuaidi100.com/query?type=auto&postid=' + encodeURIComponent(nu),
+        timeout: 10000,
+        success: res => resolve(res.data),
+        fail: reject
+      });
+    });
+  },
+
   viewTracking(e) {
     const nu = e.currentTarget.dataset.nu;
-    const apiUrl = dataManager.getApiBase();
-    if (!apiUrl) {
-      wx.setClipboardData({ data: nu, success: () => wx.showToast({ title: '物流单号已复制', icon: 'success' }) });
-      return;
-    }
     wx.showLoading({ title: '查询中...' });
-    wx.request({
-      url: apiUrl + '/api/tracking?nu=' + encodeURIComponent(nu),
-      timeout: 10000,
-      success: res => {
-        wx.hideLoading();
-        const d = res.data;
-        if (res.statusCode !== 200) {
-          wx.showModal({ title: '查询失败', content: '后端返回 ' + res.statusCode + '，可能未部署最新代码', showCancel: false });
-        } else if (d && d.data && d.data.length > 0) {
-          const logs = d.data.map(item => item.context || item.ftime || '').join('\n');
-          wx.showModal({ title: '物流轨迹', content: logs, showCancel: false });
-        } else {
-          wx.showModal({ title: '暂无轨迹', content: d.message || '未查询到物流信息', showCancel: false });
-        }
-      },
-      fail: err => {
-        wx.hideLoading();
-        wx.showModal({ title: '查询失败', content: err.errMsg || '请检查服务器地址或网络', showCancel: false });
+    this.queryTracking(nu).then(d => {
+      wx.hideLoading();
+      if (d && d.data && d.data.length > 0) {
+        const logs = d.data.map(item => item.context || item.ftime || '').join('\n');
+        wx.showModal({ title: '物流轨迹', content: logs, showCancel: false });
+      } else {
+        wx.showModal({ title: '暂无轨迹', content: d.message || '未查询到物流信息', showCancel: false });
       }
+    }).catch(err => {
+      wx.hideLoading();
+      wx.setClipboardData({ data: nu, success: () => wx.showToast({ title: '查询失败，单号已复制', icon: 'none' }) });
     });
   },
 
